@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Form Upload Presensi</title>
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"
+      integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css"
+    />
+    <!-- development -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    <!-- production -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  </head>
+  <body>
+    <div class="container" id="app">
+      <section class="hero is-info">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+              Form Upload Presensi
+            </h1>
+          </div>
+        </div>
+      </section>
+      <form id="formBAP">
+        <!-- Pekan -->
+        <div class="field ">
+          <label class="label">Pekan ke-</label>
+          <p>Pekan ke-1 running modul, pekan ke-2 adalah modul 1, dst.</p>
+          <div class="control is-expanded">
+            <div class="select is-fullwidth">
+              <select name="pekan">
+                <option value="1">1 (Running Modul)</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Mata Praktikum -->
+        <div class="field">
+          <label class="label">Praktikum</label>
+          <div class="control is-expanded">
+            <div class="select is-fullwidth">
+              <select v-model="praktikum" name="praktikum">
+                <option value="APPL">APPL</option>
+                <option value="PBO">PBO</option>
+                <option value="WEBPRO">WEBPRO</option>
+                <option value="STD">STD</option>
+                <option value="SJK">SJK</option>
+                <option value="DAP">DAP</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <!-- Kelas -->
+        <div class="field has-addons-centered">
+          <label class="label">Kelas {{ praktikum }}</label>
+          <div class="control is-expanded">
+            <div class="select is-fullwidth">
+              <template v-if="praktikum == 'STD' ">
+                <select name="kelas">
+                  <option v-for="kelas in kelasSTD" :value="kelas">{{
+                    kelas
+                  }}</option>
+                </select>
+              </template>
+              <template v-else-if="praktikum == 'DAP' ">
+                <select name="kelas">
+                  <option v-for="kelas in kelasDAP" :value="kelas">{{
+                    kelas
+                  }}</option>
+                </select>
+              </template>
+              <template v-else-if="praktikum == 'SJK' ">
+                <select name="kelas">
+                  <option v-for="kelas in kelasSJK" :value="kelas">{{
+                    kelas
+                  }}</option>
+                </select>
+              </template>
+              <template v-else-if="praktikum == 'PBO' ">
+                <select name="kelas" id="kelas">
+                  <option v-for="kelas in kelasPBO" :value="kelas">{{
+                    kelas
+                  }}</option>
+                </select>
+              </template>
+              <template v-else-if="praktikum == 'APPL' ">
+                <select name="kelas" id="kelas">
+                  <option v-for="kelas in kelasAPPL" :value="kelas">{{
+                    kelas
+                  }}</option>
+                </select>
+              </template>
+              <template v-else-if="praktikum == 'WEBPRO' ">
+                <select name="kelas" id="kelas">
+                  <option v-for="kelas in kelasWEBPRO" :value="kelas">{{
+                    kelas
+                  }}</option>
+                </select>
+              </template>
+            </div>
+          </div>
+        </div>
+        <!-- File -->
+        <div class="field">
+          <div class="file has-name">
+            <label class="file-label">
+              <input class="file-input" type="file" name="bap" id="file" />
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Upload Presensi
+                </span>
+              </span>
+              <label for="file">
+                <span class="file-name" id="filename">...</span>
+              </label>
+            </label>
+          </div>
+        </div>
+        <button
+          type="submit"
+          id="buttonSubmit"
+          form="formBAP"
+          class="button is-link"
+          onclick="document.getElementById('buttonSubmit').innerHTML='Mengunggah...'; google.script.run.withSuccessHandler(fileUploaded)
+            .uploadFiles(this.parentNode);
+            return false;"
+        >
+          Submit
+        </button>
+      </form>
+      <div id="output"></div>
+    </div>
+  </body>
+</html>
+
+<script>
+  new Vue({
+    el: '#app',
+    data: {
+      praktikum: '',
+      kelasSTD: [
+        'IF-42-01',
+        'IF-42-02',
+        'IF-42-03',
+        'IF-42-04',
+        'IF-42-05',
+        'IF-42-06',
+        'IF-42-07',
+        'IF-42-08',
+        'IF-42-09',
+        'IF-42-10',
+        'IF-42-11',
+        'IF-42-12',
+        'IF-42-GA',
+        'IF-42-IN',
+        'IT-42-01',
+        'IT-42-02',
+        'IT-42-03',
+        'IT-42-GAB'
+      ],
+      kelasDAP: ['IF-42-GAB01', 'IF-42-GAB02', 'IF-42-GAB03', 'IF-42-INT-GAB'],
+      kelasSJK: ['IT-41-01', 'IT-41-02', 'IT-41-03'],
+      kelasPBO: [
+        'IFIK-41-01',
+        'IFIK-41-02',
+        'IFIK-41-03',
+        'IFIK-41-04',
+        'IT-41-01',
+        'IT-41-02',
+        'IT-41-03'
+      ],
+      kelasAPPL: [
+        'IF-41-01',
+        'IF-41-02',
+        'IF-41-03',
+        'IF-41-04',
+        'IF-41-05',
+        'IF-41-06',
+        'IF-41-07',
+        'IF-41-08',
+        'IF-41-09',
+        'IF-41-10',
+        'IF-41-11',
+        'IF-41-12',
+        'IF-41-INT01',
+        'IF-41-INT02',
+        'IFIK-41-01',
+        'IFIK-41-02',
+        'IFIK-41-03',
+        'IFIK-41-04'
+      ],
+      kelasWEBPRO: [
+        'IF-41-01',
+        'IF-41-02',
+        'IF-41-03',
+        'IF-41-04',
+        'IF-41-05',
+        'IF-41-06',
+        'IF-41-07',
+        'IF-41-08',
+        'IF-41-09',
+        'IF-41-10',
+        'IF-41-11',
+        'IF-41-12',
+        'IF-41-INT01',
+        'IF-41-INT02',
+        'IFIK-39-01',
+        'IFIK-39-02',
+        'IFIK-39-03'
+      ]
+    },
+    methods: {
+      getFilename: function() {
+        var name = document.getElementById('fileUpload').files[0].name;
+        alert(name);
+      }
+    }
+  });
+  // This function will be called after the Google Script has executed
+  function fileUploaded(status) {
+    document.getElementById('formBAP').style.display = 'none';
+    document.getElementById('output').innerHTML = status;
+  }
+  // To display the filename beside the upload button
+  var file = document.getElementById('file');
+  file.onchange = function() {
+    if (file.files.length > 0) {
+      document.getElementById('filename').innerHTML = file.files[0].name;
+    }
+  };
+</script>
