@@ -2,7 +2,7 @@
 function doGet(e) {
   return HtmlService.createHtmlOutputFromFile('index.html')
     .setSandboxMode(HtmlService.SandboxMode.NATIVE)
-    .setTitle('Form Upload BAP');
+    .setTitle('Form Upload Presensi');
   // This is important as file upload fail in IFRAME Sandbox mode.
 }
 
@@ -15,20 +15,26 @@ function uploadFiles(form) {
     var firstLevelFolderIter = dApp.getFoldersByName(firstFolderName);
     var firstLevelFolder = firstLevelFolderIter.hasNext()
       ? firstLevelFolderIter.next()
-      : dApp.createFolder(firstFolderName);
+      : dApp
+          .createFolder(firstFolderName)
+          .setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.VIEW);
 
     var secondLevelFolderName = '[' + semester + '] ' + form.praktikum; // --[GENAP 18/19] PBO
     var secondLevelFolderIter = dApp.getFoldersByName(secondLevelFolderName);
     var secondLevelFolder = secondLevelFolderIter.hasNext()
       ? secondLevelFolderIter.next()
-      : firstLevelFolder.createFolder(secondLevelFolderName);
+      : firstLevelFolder
+          .createFolder(secondLevelFolderName)
+          .setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.VIEW);
 
     var thirdLevelFolderName =
       '[' + form.praktikum + ' ' + semester + '] Pekan-' + form.pekan; // ----[PBO GENAP 18/19] Pekan-1
     var thirdLevelFolderIter = dApp.getFoldersByName(thirdLevelFolderName);
     var thirdLevelFolder = thirdLevelFolderIter.hasNext()
       ? thirdLevelFolderIter.next()
-      : secondLevelFolder.createFolder(thirdLevelFolderName);
+      : secondLevelFolder
+          .createFolder(thirdLevelFolderName)
+          .setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.VIEW);
 
     var fourthLevelFolderName =
       '[' +
@@ -42,7 +48,9 @@ function uploadFiles(form) {
     var fourthLevelFolderIter = dApp.getFoldersByName(fourthLevelFolderName);
     var fourthLevelFolder = fourthLevelFolderIter.hasNext()
       ? fourthLevelFolderIter.next()
-      : thirdLevelFolder.createFolder(fourthLevelFolderName);
+      : thirdLevelFolder
+          .createFolder(fourthLevelFolderName)
+          .setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.VIEW);
 
     var blob = form.bap;
     var file = fourthLevelFolder.createFile(blob);
