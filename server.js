@@ -1,12 +1,12 @@
-/* The script is deployed as a web app and renders the form */
+// The script is deployed as a web app and renders the form
 function doGet(e) {
   return HtmlService.createHtmlOutputFromFile('index.html')
-    .setSandboxMode(HtmlService.SandboxMode.NATIVE)
-    .setTitle('Form Upload Presensi');
-  // This is important as file upload fail in IFRAME Sandbox mode.
+    .setSandboxMode(HtmlService.SandboxMode.NATIVE) // This is important as file upload fail in IFRAME Sandbox mode.
+    .setTitle('Form Upload Presensi')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL); // To allow this script to be iframe-d on other website.
 }
 
-/* This function will process the submitted form */
+// This function will process the submitted form
 function uploadFiles(form) {
   var dApp = DriveApp;
   var semester = 'GENAP 18/19';
